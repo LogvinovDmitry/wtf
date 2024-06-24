@@ -2,9 +2,11 @@ package com.wtf.service.impl;
 
 import com.uwetrottmann.tmdb2.Tmdb;
 import com.uwetrottmann.tmdb2.entities.Movie;
-import com.wtf.dto.chatGptDTO.RecommendationMovieByGpt;
-import com.wtf.service.ThemoviedbService;
+import com.wtf.dto.chatGPT.ChatGptRecommendation;
+import com.wtf.service.TMDBService;
+import com.wtf.util.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
@@ -13,33 +15,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-public class ThemoviedbServiceImpl implements ThemoviedbService {
+public class TMDBServiceImpl implements TMDBService {
 
     private final Tmdb tmdb;
 
-    public List<Movie> getMoviesFromThemoviedb(
-            List<RecommendationMovieByGpt> recommendationMovieByGptList) throws IOException {
+    public List<Movie> getAllByRecommendations(List<ChatGptRecommendation> chatGptRecommendations) {
 
-        List<Movie> movieListFromThemoviedb = new ArrayList<>();
+        List<Movie> movies = new ArrayList<>();
 
-        for (RecommendationMovieByGpt recommendationMovieByGpt : recommendationMovieByGptList) {
+        for (ChatGptRecommendation chatGptRecommendation : chatGptRecommendations) {
 
+            //TODO: delete if not necessary
             //При необходимости можно добавить информацию о актерах и фото
             //https://api.themoviedb.org/3/movie/77338?api_key=9d01b6fbae0990e0759336c85998ee46&append_to_response=credits,images
             //или в коде (только с ошибкой - аргументы надо через Энамы аргументы вносить):
             //tmdb.moviesService().summary(recommendationMovieByGpt.getTmdbId(), "en-US", new AppendToResponse("credits, images, videos, reviews, similar, recommendations")).execute();
 
-            Response<Movie> movieFromThemoviedb = tmdb.moviesService().summary(recommendationMovieByGpt.getTmdbId()
-                    , "en-US").execute();
-
-            if (movieFromThemoviedb.isSuccessful()) {
-                movieListFromThemoviedb.add(movieFromThemoviedb.body());
+            try {
+                Response<Movie> concreteMovie = tmdb
+                        .moviesService()
+                        .summary(chatGptRecommendation.getTmdbId(), Constants.LOCALE_EN_US)
+                        .execute();
+                if (concreteMovie.isSuccessful()) {
+                    movies.add(concreteMovie.body());
+                }
+            } catch (IOException e) {
+                log.warn("Could not fetch tmdb movie details for ID {}", tmdb, e);
             }
-        }
 
-        return movieListFromThemoviedb;
+        }
+        return movies;
     }
+//TODO: delete if not necessary
 
 //        //Блок с multi
 //        //Основное различие заключается в том, что searchService.movie() ищет только фильмы, в то время как

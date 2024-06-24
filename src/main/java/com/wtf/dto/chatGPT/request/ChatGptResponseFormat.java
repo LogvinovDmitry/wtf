@@ -1,4 +1,4 @@
-package com.wtf.dto.chatGptDTO.request;
+package com.wtf.dto.chatGPT.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseFormat {
+public class ChatGptResponseFormat {
     private String type;
 }
 

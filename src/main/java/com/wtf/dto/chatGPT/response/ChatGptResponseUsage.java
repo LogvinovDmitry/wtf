@@ -1,4 +1,4 @@
-package com.wtf.dto.chatGptDTO.response;
+package com.wtf.dto.chatGPT.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usage {
+public class ChatGptResponseUsage {
     @JsonProperty("prompt_tokens")
     private int promptTokens;
     @JsonProperty("completion_tokens")

@@ -1,17 +1,16 @@
-package com.wtf.dto.chatGptDTO.request;
+package com.wtf.dto.chatGPT;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
-    private String role;
-    private String content;
+public class ChatGptRecommendationList {
+    private List<ChatGptRecommendation> recommendations;
 }
-
-
