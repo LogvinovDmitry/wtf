@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "chatgpt-client", url = "https://api.openai.com")
 public interface ChatGPTClient {
 
+    //Тут был Дима
     @PostMapping("/v1/chat/completions")
     ChatGptResponse getChatGptResponse(@RequestBody ChatGptRequest request,
                                        @RequestHeader(Constants.AUTHORIZATION_HEADER) String authorization);
