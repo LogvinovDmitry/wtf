@@ -2,21 +2,24 @@ package com.wtf.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wtf.dto.chatGptDTO.RecommendationMovieByGpt;
-import com.wtf.dto.chatGptDTO.RecommendationMovieListByGpt;
-import com.wtf.dto.chatGptDTO.request.ChatGptRequest;
-import com.wtf.dto.chatGptDTO.response.ChatGptResponse;
-import com.wtf.dto.chatGptDTO.response.Choice;
-import com.wtf.dto.chatGptDTO.response.Message;
+import com.wtf.client.ChatGPTClient;
+import com.wtf.dto.chatGPT.ChatGptRecommendation;
+import com.wtf.dto.chatGPT.ChatGptRecommendationList;
+import com.wtf.dto.chatGPT.request.ChatGptRequest;
+import com.wtf.dto.chatGPT.response.ChatGptResponse;
+import com.wtf.dto.chatGPT.response.ChatGptResponseChoice;
 import com.wtf.service.ChatGPTService;
-import com.wtf.util.client.ChatGPTClient;
+import com.wtf.util.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ChatGPTServiceImpl implements ChatGPTService {
 
@@ -27,35 +30,28 @@ public class ChatGPTServiceImpl implements ChatGPTService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<RecommendationMovieByGpt> getRecommendationMoviesByGpt(
-            ChatGptRequest chatGptRequest) throws JsonProcessingException {
+    public List<ChatGptRecommendation> getChatGptRecommendations(ChatGptRequest chatGptRequest) {
 
-        ChatGptResponse chatGptResponse = chatGPTClient
-                .getChatGptResponse(chatGptRequest, "Bearer " + authorizationToken);
+        ChatGptResponse chatGptResponse = chatGPTClient.getChatGptResponse(chatGptRequest,
+                String.format("%s %s", Constants.BEARER, authorizationToken));
 
-        List<Choice> choices = chatGptResponse.getChoices();
+        Optional<ChatGptResponseChoice> chatGptResponseChoiceOpt = chatGptResponse.getChoices().stream().findFirst();
 
-        String content = null;
-
-        for (Choice choice : choices) {
-            Message message = choice.getMessage();
-
-            if (choice.getMessage() != null) {
-                content = message.getContent();
-
-                break;
-            }
+        if (chatGptResponseChoiceOpt.isEmpty() || chatGptResponseChoiceOpt.get().getMessage() == null) {
+            throw new IllegalStateException("No valid message found in ChatGpt response.");
         }
 
-        if (content == null) {
-            //logger.error("No valid message found in the response.");
-            throw new IllegalStateException("No valid message found in the response.");
+        //TODO: log ChatGptResponseUsage meta info here
+
+        String recommendationContent = chatGptResponseChoiceOpt.get().getMessage().getContent();
+        ChatGptRecommendationList chatGptRecommendationList;
+        try {
+            chatGptRecommendationList = objectMapper.readValue(recommendationContent, ChatGptRecommendationList.class);
+        } catch (JsonProcessingException e) {
+            log.error("Could not parse json from chatGPT response", e);
+            throw new RuntimeException("Could not parse json from chatGPT response", e);
         }
 
-        RecommendationMovieListByGpt recommendationMovieListByGpt = objectMapper
-                .readValue(content, RecommendationMovieListByGpt.class);
-
-        return recommendationMovieListByGpt.getRecommendationMovieByGptList();
-
+        return chatGptRecommendationList.getRecommendations();
     }
 }

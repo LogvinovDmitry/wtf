@@ -1,16 +1,14 @@
-package com.wtf.dto.chatGptDTO;
+package com.wtf.dto.chatGPT;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecommendationMovieByGpt {
+public class ChatGptRecommendation {
     private String name;
     private int year;
 //    private String region;

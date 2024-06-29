@@ -1,6 +1,7 @@
-package com.wtf.dto.chatGptDTO.request;
+package com.wtf.dto.chatGPT.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wtf.dto.chatGPT.ChatGptMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,14 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ChatGptRequest {
     private String model;
-    @JsonProperty("response_format")
-    private ResponseFormat responseFormat;
-    private List<Message> messages;
+    private List<ChatGptMessage> messages;
     @JsonProperty("max_tokens")
     private int maxTokens;
-
-
-
+    @JsonProperty("response_format")
+    private ChatGptResponseFormat chatGptResponseFormat;
 }
 
 

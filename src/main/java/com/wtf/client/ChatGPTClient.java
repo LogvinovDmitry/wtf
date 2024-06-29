@@ -1,14 +1,16 @@
-package com.wtf.util.client;
+package com.wtf.client;
 
-import com.wtf.dto.chatGptDTO.request.ChatGptRequest;
-import com.wtf.dto.chatGptDTO.response.ChatGptResponse;
+import com.wtf.dto.chatGPT.request.ChatGptRequest;
+import com.wtf.dto.chatGPT.response.ChatGptResponse;
+import com.wtf.util.Constants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+//TODO: move feign client base url url to property file
 @FeignClient(name = "chatgpt-client", url = "https://api.openai.com")
 public interface ChatGPTClient {
 
     @PostMapping("/v1/chat/completions")
     ChatGptResponse getChatGptResponse(@RequestBody ChatGptRequest request,
-                                       @RequestHeader("Authorization") String authorization);
+                                       @RequestHeader(Constants.AUTHORIZATION_HEADER) String authorization);
 }

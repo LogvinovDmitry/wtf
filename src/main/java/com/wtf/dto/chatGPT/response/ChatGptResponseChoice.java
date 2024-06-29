@@ -1,6 +1,7 @@
-package com.wtf.dto.chatGptDTO.response;
+package com.wtf.dto.chatGPT.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wtf.dto.chatGPT.ChatGptMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Choice {
+public class ChatGptResponseChoice {
     private int index;
-    private Message message;
-    private Object logprobs;
-    @JsonProperty("finish_reason")
-    private String finishReason;
+    private ChatGptMessage message;
 
 }
