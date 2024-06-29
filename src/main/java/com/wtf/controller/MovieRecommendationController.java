@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/movie-recommendation")
 public class MovieRecommendationController {
 
+    //Второй комент
     private final MovieRecommendationService movieRecommendationService;
 
     @PostMapping("/")
