@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,19 +31,26 @@ public class MovieRecommendationServiceImpl implements MovieRecommendationServic
 
         log.info("-----------------------------------------------------------");
         chatGptRecommendations.forEach(chatGptRecommendation ->
-                log.info("ChatGPT Recommendation: {}", chatGptRecommendation));
-        log.info("-----------------------------------------------------------");
+                log.info("ChatGPT Recommendation: {} * {} * {}",
+                        chatGptRecommendation.getName(),
+                        chatGptRecommendation.getYear(),
+                        chatGptRecommendation.getTmdbId()));
 
+        log.info("-----------------------------------------------------------");
         List<Movie> recommendedMovies = tmdbService.getAllByRecommendations(chatGptRecommendations);
 
-        for (Movie movie : recommendedMovies) {
-            log.info(
-                    movie.title + " " +
-                    movie.original_language + " " +
-                    movie.id + " " +
-                    movie.poster_path
-            );
-        }
+        recommendedMovies.forEach(recommendedMovie ->
+        {
+            Date releaseDate = recommendedMovie.release_date;
+            //не самое лучшее решение выводить с такой проверкой данные, которые нужны нам только для наглядности...
+            assert releaseDate != null: "Release date should not be null";
+            LocalDate localDate = releaseDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int year = localDate.getYear();
+            log.info("tmdbService: {} * {} * {}",
+                    recommendedMovie.title,
+                    year,
+                    recommendedMovie.id);
+        });
 
         return recommendedMovies;
     }
