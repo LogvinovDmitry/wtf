@@ -26,13 +26,6 @@ public class TMDBServiceImpl implements TMDBService {
         List<Movie> movies = new ArrayList<>();
 
         for (ChatGptRecommendation chatGptRecommendation : chatGptRecommendations) {
-
-            //TODO: delete if not necessary
-            //При необходимости можно добавить информацию о актерах и фото
-            //https://api.themoviedb.org/3/movie/77338?api_key=9d01b6fbae0990e0759336c85998ee46&append_to_response=credits,images
-            //или в коде (только с ошибкой - аргументы надо через Энамы аргументы вносить):
-            //tmdb.moviesService().summary(recommendationMovieByGpt.getTmdbId(), "en-US", new AppendToResponse("credits, images, videos, reviews, similar, recommendations")).execute();
-
             try {
                 Response<Movie> concreteMovie = tmdb
                         .moviesService()

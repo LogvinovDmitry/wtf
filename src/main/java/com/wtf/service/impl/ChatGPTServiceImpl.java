@@ -41,7 +41,13 @@ public class ChatGPTServiceImpl implements ChatGPTService {
             throw new IllegalStateException("No valid message found in ChatGpt response.");
         }
 
-        //TODO: log ChatGptResponseUsage meta info here
+        log.info("***********************************************************");
+        log.info("Completion Tokens: {}, Prompt Tokens: {} Total Tokens: {}",
+                chatGptResponse.getUsage().getCompletionTokens(),
+                chatGptResponse.getUsage().getPromptTokens(),
+                chatGptResponse.getUsage().getTotalTokens()
+        );
+        log.info("***********************************************************");
 
         String recommendationContent = chatGptResponseChoiceOpt.get().getMessage().getContent();
         ChatGptRecommendationList chatGptRecommendationList;
