@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -39,18 +38,19 @@ public class MovieRecommendationServiceImpl implements MovieRecommendationServic
         log.info("-----------------------------------------------------------");
         List<Movie> recommendedMovies = tmdbService.getAllByRecommendations(chatGptRecommendations);
 
-        recommendedMovies.forEach(recommendedMovie ->
-        {
-            Date releaseDate = recommendedMovie.release_date;
-            //не самое лучшее решение выводить с такой проверкой данные, которые нужны нам только для наглядности...
-            assert releaseDate != null: "Release date should not be null";
-            LocalDate localDate = releaseDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int year = localDate.getYear();
-            log.info("tmdbService: {} * {} * {}",
-                    recommendedMovie.title,
-                    year,
-                    recommendedMovie.id);
-        });
+        recommendedMovies.stream()
+                .filter(movie -> movie.release_date != null)
+                .forEach(recommendedMovie ->
+                    {
+                        Date releaseDate = recommendedMovie.release_date;
+                        LocalDate localDate = releaseDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        int year = localDate.getYear();
+                        log.info("tmdbService: {} * {} * {}",
+                                recommendedMovie.title,
+                                year,
+                                recommendedMovie.id);
+                    }
+                );
 
         return recommendedMovies;
     }
