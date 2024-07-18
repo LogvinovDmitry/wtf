@@ -1,8 +1,10 @@
 package com.wtf.service.impl;
 
 import com.uwetrottmann.tmdb2.entities.Movie;
+import com.wtf.client.WikidataClient;
 import com.wtf.dto.chatGPT.ChatGptRecommendation;
 import com.wtf.dto.chatGPT.request.ChatGptRequest;
+import com.wtf.dto.wikidata.WikidataResponse;
 import com.wtf.service.ChatGPTService;
 import com.wtf.service.MovieRecommendationService;
 import com.wtf.service.TMDBService;
@@ -22,6 +24,7 @@ public class MovieRecommendationServiceImpl implements MovieRecommendationServic
 
     private final ChatGPTService chatGPTService;
     private final TMDBService tmdbService;
+    private final WikidataClient wikidataClient;
 
     @Override
     public List<Movie> getRecommendedMovies(ChatGptRequest chatGptRequest) {
@@ -51,6 +54,18 @@ public class MovieRecommendationServiceImpl implements MovieRecommendationServic
                                 recommendedMovie.id);
                     }
                 );
+
+        //block for test wikidata-client
+        String testId = "Q214801";
+
+        WikidataResponse wikidataResponse = wikidataClient.getWikidataResponse(testId);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        log.info("wikidataResponse: {} * {} * {}",
+                wikidataResponse.getId(),
+                wikidataResponse.getLabels().getEn(),
+                wikidataResponse.getDescriptions().getEn()
+        );
+        ////////////////////////////////
 
         return recommendedMovies;
     }
