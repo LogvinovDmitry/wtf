@@ -41,22 +41,4 @@ public class TMDBServiceImpl implements TMDBService {
         }
         return movies;
     }
-//TODO: delete if not necessary
-
-//        //Блок с multi
-//        //Основное различие заключается в том, что searchService.movie() ищет только фильмы, в то время как
-//        //searchService().multi() ищет любые типы объектов, доступных в базе данных TMDb (фильмы, сериалы, персоны).
-//        MediaResultsPage resultsPage = tmdb.searchService().multi(query1, null, null, null, null).execute().body();
-//
-//        //Выводим результаты поиска
-//        if (resultsPage != null && resultsPage.results != null) {
-//            for (Media result : resultsPage.results) {
-//
-//                if (result.movie != null) {
-//                    String title = result.movie.title;
-//                    System.out.println(title);
-//                }
-//            }
-//        }
-
 }
