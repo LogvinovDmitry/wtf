@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/movie-recommendation")
 public class MovieRecommendationController {
-
+//Проверка
     private final MovieRecommendationService movieRecommendationService;
 
     @PostMapping("/")
