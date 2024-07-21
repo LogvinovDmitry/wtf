@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "wikidata-client", url = "${baseUrl.wikidata}")
 public interface WikidataClient {
 
-    @GetMapping("{id}")
+    @GetMapping("/entities/items/{id}")
     WikidataResponse getWikidataResponse(@PathVariable("id") String id);
 }
