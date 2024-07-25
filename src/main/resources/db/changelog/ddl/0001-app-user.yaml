@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 849bf8cb-915a-4ea2-bc8f-c5a26fa7d41d
+      author: Dmytro Ledinov
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  value: uid.uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
