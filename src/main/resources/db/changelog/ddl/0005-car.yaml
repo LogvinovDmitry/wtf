@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Andrii Protsenko
+      changes:
+        - createTable:
+            tableName: car
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  value: uid.uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: brand
+                  type: varchar(255)
+              - column:
+                  name: model
+                  type: varchar(255)
+              - column:
+                  name: sale_class
+                  type: varchar(255)
+              - column:
+                  name: custom_data
+                  type: json
+                  constraints:
+                    nullable: true
+              - column:
+                  name: registration_date
+                  type: varchar(255)
+              - column:
+                  name: order_id
+                  type: varchar(255)
+              - column:
+                  name: vin
+                  type: varchar(255)
+              - column:
+                  name: license_plate_number
+                  type: varchar(255)
+              - column:
+                  name: current_mileage
+                  type: decimal
+              - column:
+                  name: car_options
+                  type: varchar(512)
+              - column:
+                  name: planned_delivery_date
+                  type: varchar(255)
+              - column:
+                  name: insurance
+                  type: varchar(255)
+              - column:
+                  name: eurotax_code
+                  type: numeric
+              - column:
+                  name: eurotax_list_price
+                  type: decimal(12,2)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  value: current_timestamp
+                  defaultValueDate: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  value: current_timestamp
+                  defaultValueDate: current_timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
